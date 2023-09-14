@@ -4,6 +4,10 @@ from discord.ext import commands
 from colorama import Fore, Back, Style
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
+import selenium
+from selenium import webdriver
+from getpass import getpass
+import time
     
 #region GetFruitList
 def purifyFruit(fruitInput):
@@ -144,6 +148,32 @@ async def assignfruit(ctx):
         else:
             await ctx.send(fruitPics[fruits.index(output)])
 
+@client.command()
+async def getgrades(ctx, id, password):
+    driver = webdriver.Chrome(executable_path="C:\\Users\\justi\\Desktop\\Personal\\WebDriver\\chromedriver.exe")
+    driver.get("https://publish.gwinnett.k12.ga.us/gcps/home/gcpslogin")
+
+
+    id_textbox = driver.find_element_by_id("portalUserID")
+    id_textbox.send_keys(id)
+
+    password_textbox = driver.find_element_by_id("portalPassword")
+    password_textbox.send_keys(password)
+
+    login_button = driver.find_element_by_id("_loginsubmit")
+    login_button.click()
+
+    driver.get("https://apps.gwinnett.k12.ga.us/spvue/SamlSSOPortal.aspx?whr=https://apps.gwinnett.k12.ga.us/sps/spvue/saml20")
+    driver.get("https://apps.gwinnett.k12.ga.us/spvue/PXP2_Gradebook.aspx?AGU=0&studentGU=32740E4B-6C59-4791-AA7D-5318C6D54363")
+
+    grades = driver.find_elements_by_class_name("mark")
+    classes = driver.find_elements_by_class_name("btn.btn-link.course-title")
+
+    for x in range(len(grades)):
+        await ctx.send(classes[x].text + ": " + grades[x].text)
+    
+    driver.quit()
+
 #endregion
 
-client.run('NzY5NDEwMjI0ODIxMjM5ODE5.X5OnHA.sspioz69AG3D4cfvCT_cMd2aYLw')
+client.run('NzY5NDEwMjI0ODIxMjM5ODE5.X5OnHA.8i13_hWDPx_VvYPVF3T-S5lEn1o')
