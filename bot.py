@@ -176,4 +176,4 @@ async def getgrades(ctx, id, password):
 
 #endregion
 
-client.run('NzY5NDEwMjI0ODIxMjM5ODE5.X5OnHA.8i13_hWDPx_VvYPVF3T-S5lEn1o')
+client.run(*)
